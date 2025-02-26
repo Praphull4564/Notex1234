@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Aadhaar Services - Notex{% endblock %}
+
+{% block content %}
+<div class="service-list-header">
+    <h2>Aadhaar Services</h2>
+    <p>Complete range of Aadhaar card services to meet all your needs</p>
+</div>
+
+<div class="row">
+    {% for category, services in aadhar_services.items() %}
+    <div class="col-md-6 mb-4">
+        <div class="card service-category-card">
+            <div class="card-header">
+                <h5 class="mb-0">{{ category }}</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for service in services %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('book_appointment', service_type='Aadhaar', service_name=service|urlencode) }}">
+                            {{ service }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

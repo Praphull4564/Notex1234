@@ -1,0 +1,731 @@
+/* Update these color variables at the top of your style.css */
+:root {
+    --primary-color: #2563eb;          /* Royal Blue */
+    --primary-dark: #1d4ed8;           /* Darker Blue */
+    --secondary-color: #0ea5e9;        /* Sky Blue */
+    --background-dark: #0f172a;        /* Navy Dark */
+    --background-light: #1e293b;       /* Navy Light */
+    --background-gradient-1: #0f172a;  /* Dark Blue */
+    --background-gradient-2: #1e3a8a;  /* Medium Blue */
+    --success-color: #22c55e;          /* Green */
+    --warning-color: #eab308;          /* Yellow */
+    --danger-color: #ef4444;           /* Red */
+    --text-primary: #ffffff;           /* White */
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    background: linear-gradient(135deg, var(--background-gradient-1) 0%, var(--background-gradient-2) 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+.card {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.4), rgba(15, 23, 42, 0.4));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.list-group-item a {
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.list-group-item a:hover {
+    color: #007bff;
+}
+
+.navbar {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.alert {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.2), rgba(15, 23, 42, 0.2));
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    margin-bottom: 20px;
+} 
+
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1B392F;
+    color: white;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navigation Styles */
+.navbar {
+    padding: 1.5rem 0;
+    position: relative;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Button Styles */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(145deg, #3b82f6, #2563eb);
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(145deg, #2563eb, #1d4ed8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ghost {
+    color: white;
+    background: transparent;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-search {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.btn-search:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero Section */
+.hero {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.trust-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--background-light);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    margin-bottom: 2rem;
+}
+
+.stars {
+    color: var(--warning-color);
+}
+
+.hero-content {
+    margin-bottom: 3rem;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Search Box */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto 4rem;
+}
+
+.search-box {
+    display: flex;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-box input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.search-box input::placeholder {
+    color: #666;
+    opacity: 1;
+    font-weight: 400;
+}
+
+.search-box input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
+    background: #ffffff;
+}
+
+.search-box input:focus::placeholder {
+    color: #999;
+}
+
+/* Service Cards */
+.service-cards {
+    margin-top: 2rem;
+}
+
+.service-card {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.4), rgba(15, 23, 42, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card .card-body {
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.service-card .card-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.service-card .card-text {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+/* Service Card Button */
+.service-card .btn-primary {
+    background: linear-gradient(145deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: auto;
+}
+
+.service-card .btn-primary:hover {
+    background: linear-gradient(145deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.service-card .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Service Card Hover Effect */
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* Add glow effect on hover */
+.service-card:hover .btn-primary {
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3),
+                0 0 20px rgba(37, 99, 235, 0.2);
+}
+
+/* Trusted By Section */
+.trusted-by {
+    text-align: center;
+    padding: 2rem 0 4rem;
+}
+
+.trusted-by p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.partner-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.partner-logos img {
+    height: 40px;
+    opacity: 0.7;
+    filter: brightness(0) invert(1);
+}
+
+/* Alert Styles */
+.alert {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    border-radius: 8px;
+}
+
+.alert-success {
+    background-color: rgba(34, 197, 94, 0.2);
+    border-color: var(--success-color);
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger-color);
+}
+
+.alert-warning {
+    background-color: rgba(234, 179, 8, 0.2);
+    border-color: var(--warning-color);
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+/* Service List Pages */
+.service-list-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.service-list-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.service-category-card {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.4), rgba(15, 23, 42, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.service-category-card .card-header {
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+}
+
+.service-category-card .card-header h5 {
+    color: white;
+    font-weight: 600;
+    margin: 0;
+}
+
+.service-category-card .list-group {
+    background-color: transparent;
+}
+
+.service-category-card .list-group-item {
+    background-color: var(--background-light);
+    border-color: var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+.service-category-card .list-group-item a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.service-category-card .list-group-item a:hover {
+    color: var(--secondary-color);
+}
+
+/* Form Styles */
+.form-card {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.6), rgba(15, 23, 42, 0.6));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-card .card-header {
+    background: var(--primary-color);
+    border-bottom: none;
+    padding: 1.25rem 1.5rem;
+}
+
+.form-card .card-header h4 {
+    color: white;
+    font-weight: 600;
+    margin: 0;
+}
+
+.form-card .card-body {
+    padding: 2rem;
+}
+
+.form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.9) !important;  /* Lighter background */
+    border: 1px solid var(--border-color);
+    color: var(--background-dark) !important;  /* Dark text color */
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.form-control:focus {
+    background-color: #ffffff !important;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    color: #000000 !important;
+}
+
+.form-control::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400;
+}
+
+.form-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.text-danger {
+    color: #ff4444 !important;
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Style form check labels */
+.form-check-label {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+}
+
+/* Style links in forms */
+.card-body a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.card-body a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.mobile-menu-btn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-links, .auth-buttons {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .partner-logos {
+        gap: 2rem;
+    }
+
+    .partner-logos img {
+        height: 30px;
+    }
+
+    .service-card {
+        margin-bottom: 1rem;
+    }
+
+    .search-box {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-search {
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .btn-search {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Add these styles for the booking form */
+.info-card {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.2), rgba(15, 23, 42, 0.2));
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.input-group-text {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.form-text {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.alert-info {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-color: var(--secondary-color);
+    color: var(--text-primary);
+}
+
+.alert-info ul {
+    padding-left: 1.25rem;
+    margin-bottom: 0;
+}
+
+.alert-info ul li {
+    margin-bottom: 0.25rem;
+}
+
+.alert-info ul li:last-child {
+    margin-bottom: 0;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+}
+
+.service-details .text-primary {
+    color: var(--primary-color) !important;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-control:focus + .input-group-text {
+    border-color: var(--primary-color);
+}
+
+/* Improve form spacing on mobile */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .info-card {
+        padding: 1rem !important;
+    }
+    
+    .row > div[class^="col-"] {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Add spacing between form elements */
+.mb-3 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Style form dividers */
+.form-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1.5rem 0;
+}
+
+/* Center text elements */
+.text-center {
+    text-align: center;
+    color:white;
+}
+
+/* Search Results Styles */
+.search-results {
+    padding: 2rem 0;
+}
+
+.service-result-card {
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.service-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.service-result-card .card-title {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.service-result-card .badge {
+    font-size: 0.875rem;
+    padding: 0.5em 1em;
+    margin-right: 0.5rem;
+}
+
+.no-results {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.hero-section {
+    background-image: url('../images/hero-bg.jpg');
+    /* ... other styles ... */
+}
+

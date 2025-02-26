@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Notex - Your Trusted Document Service{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="trust-rating">
+        <span>Excellent</span>
+        <div class="stars">★★★★★</div>
+        <span>Trustpilot</span>
+    </div>
+    
+    <div class="hero-content">
+        <h1>Your Trusted Tasker<br>for Every Task</h1>
+        <p>Connecting you with skilled professionals for all your home and personal needs.</p>
+    </div>
+    
+    <div class="search-container">
+        <form action="{{ url_for('search') }}" method="GET" class="search-box">
+            <input type="text" 
+                   name="q" 
+                   placeholder="Search for Aadhaar or PAN services..." 
+                   value="{{ request.args.get('q', '') }}"
+                   autocomplete="off"
+                   required>
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+    </div>
+    
+    <div class="service-cards">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-4">
+                <div class="card service-card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Aadhaar Services</h3>
+                        <p class="card-text">Access all Aadhaar-related services including enrollment, updates, and verification</p>
+                        <a href="{{ url_for('aadhar_services') }}" class="btn btn-primary">View Services</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card service-card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">PAN Services</h3>
+                        <p class="card-text">Manage your PAN card applications, corrections, and linking services</p>
+                        <a href="{{ url_for('pan_services') }}" class="btn btn-primary">View Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="trusted-by">
+    <p>Trusted by top companies to clean their offices</p>
+    <div class="partner-logos">
+        <img src="{{ url_for('static', filename='images/partner1.png') }}" alt="Partner 1">
+        <img src="{{ url_for('static', filename='images/partner2.png') }}" alt="Partner 2">
+        <img src="{{ url_for('static', filename='images/partner3.png') }}" alt="Partner 3">
+        <img src="{{ url_for('static', filename='images/partner4.png') }}" alt="Partner 4">
+    </div>
+</section>
+{% endblock %} 
