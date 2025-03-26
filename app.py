@@ -519,5 +519,17 @@ def get_exam_directions():
         flash('An error occurred while generating directions. Please try again.', 'danger')
         return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
 
+@app.route('/process_location', methods=['POST'])
+def process_location():
+    latitude = request.form.get('latitude')
+    longitude = request.form.get('longitude')
+    manual_address = request.form.get('manual_address')
+    
+    # Use either the coordinates or manual address based on what was provided
+    start_location = manual_address if not latitude else f"{latitude},{longitude}"
+    
+    # Continue with your existing logic for directions
+    return redirect(url_for('show_directions', start=start_location))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

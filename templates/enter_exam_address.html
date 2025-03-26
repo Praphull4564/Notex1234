@@ -1,25 +1,190 @@
 {% extends "base.html" %}
 
+{% block title %}Find Exam Center{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Enter Exam Center Address</h2>
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ url_for('get_exam_directions') }}" method="post">
-                <div class="form-group">
-                    <label for="address">Exam Center Address:</label>
-                    <textarea class="form-control" id="address" name="address" 
-                              rows="4" required 
-                              placeholder="Enter your exam center's complete address"></textarea>
-                    <small class="form-text text-muted">
-                        Please enter the complete address for accurate directions
-                    </small>
+    <div class="page-header text-center mb-5">
+        <h2 class="display-5">Plan Your Exam Journey</h2>
+        <p class="lead">Get directions from your location to your exam center</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form action="{{ url_for('get_exam_directions') }}" method="post" id="directionsForm">
+                <!-- Starting Location Card -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h4 class="mb-0"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Starting Point</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Where are you coming from?</label>
+                            
+                            <!-- Current Location Button -->
+                            <div class="d-grid mb-3">
+                                <button type="button" class="btn btn-outline-primary position-relative" onclick="getDeviceLocation()">
+                                    <i class="fas fa-crosshairs me-2"></i>Use my current device location
+                                    <span class="badge bg-primary position-absolute top-0 start-100 translate-middle rounded-pill" id="locationBadge" style="display: none;">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div id="locationStatus" class="small text-muted mb-3"></div>
+                            
+                            <!-- Manual Address Input -->
+                            <div class="mb-3">
+                                <label class="form-label">Or enter starting address:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search-location"></i></span>
+                                    <input type="text" class="form-control" id="startingAddress" name="starting_address" placeholder="Enter your starting address">
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden inputs for coordinates -->
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Get Directions</button>
-                <a href="{{ url_for('exam_center_services') }}" 
-                   class="btn btn-secondary mt-3">Back to Services</a>
+
+                <!-- Destination Address Card -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h4 class="mb-0"><i class="fas fa-flag-checkered me-2 text-primary"></i>Exam Center</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="address" class="form-label fw-bold">Exam Center Address:</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required 
+                                placeholder="Enter your exam center's complete address"></textarea>
+                            <small class="form-text text-muted">
+                                Please enter the complete address for accurate directions
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-route me-2"></i>Get Directions
+                    </button>
+                    <a href="{{ url_for('exam_center_services') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Services
+                    </a>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+function getDeviceLocation() {
+    const statusDiv = document.getElementById('locationStatus');
+    const startInput = document.getElementById('startingAddress');
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    const locationBadge = document.getElementById('locationBadge');
+    
+    // Hide the success badge
+    locationBadge.style.display = 'none';
+    
+    statusDiv.innerHTML = '<div class="alert alert-info py-2"><i class="fas fa-spinner fa-spin me-2"></i>Requesting your location...</div>';
+    
+    if (!navigator.geolocation) {
+        statusDiv.innerHTML = '<div class="alert alert-danger py-2"><i class="fas fa-exclamation-circle me-2"></i>Your browser does not support location services</div>';
+        return;
+    }
+    
+    const options = {
+        enableHighAccuracy: true,  // Get the most accurate position
+        timeout: 10000,            // Time to wait for a position
+        maximumAge: 0              // Don't use a cached position
+    };
+    
+    navigator.geolocation.getCurrentPosition(
+        // Success callback
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            // Store coordinates in hidden fields
+            latInput.value = lat;
+            lngInput.value = lng;
+            
+            // Display coordinates in the input field
+            startInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            
+            // Show success message
+            statusDiv.innerHTML = '<div class="alert alert-success py-2"><i class="fas fa-check-circle me-2"></i>Location successfully captured!</div>';
+            
+            // Show the success badge
+            locationBadge.style.display = 'block';
+        },
+        // Error callback
+        function(error) {
+            let errorMessage = '';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = '<i class="fas fa-lock me-2"></i>Please allow location access in your browser settings';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = '<i class="fas fa-exclamation-triangle me-2"></i>Location information unavailable';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = '<i class="fas fa-clock me-2"></i>Location request timed out';
+                    break;
+                default:
+                    errorMessage = '<i class="fas fa-question-circle me-2"></i>An unknown error occurred';
+            }
+            statusDiv.innerHTML = `<div class="alert alert-danger py-2">${errorMessage}</div>`;
+        },
+        options
+    );
+}
+
+// Form validation
+document.getElementById('directionsForm').addEventListener('submit', function(e) {
+    const startAddress = document.getElementById('startingAddress').value;
+    const latitude = document.getElementById('latitude').value;
+    const longitude = document.getElementById('longitude').value;
+    const destination = document.getElementById('address').value;
+    
+    // Check if at least one starting location method is provided
+    if (!startAddress && (!latitude || !longitude)) {
+        e.preventDefault();
+        document.getElementById('locationStatus').innerHTML = 
+            '<div class="alert alert-danger py-2"><i class="fas fa-exclamation-circle me-2"></i>Please provide a starting location</div>';
+        return false;
+    }
+    
+    // Check if destination is provided
+    if (!destination) {
+        e.preventDefault();
+        return false;
+    }
+    
+    return true;
+});
+</script>
+
+<style>
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+.card-header {
+    border-bottom: 2px solid rgba(37, 99, 235, 0.1);
+}
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+</style>
 {% endblock %} 

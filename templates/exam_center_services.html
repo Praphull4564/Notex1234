@@ -105,83 +105,119 @@
         </div>
     </div>
 
-    <!-- Add this section where you want to get user's location -->
+    <!-- Starting Location Section -->
     <div class="card mb-4">
         <div class="card-header">
-            <h4><i class="fas fa-map-marker-alt me-2"></i>Starting Location</h4>
+            <h4><i class="fas fa-map-marker-alt me-2"></i>Select Starting Location</h4>
         </div>
         <div class="card-body">
-            <div class="mb-3">
-                <label for="startLocation" class="form-label">Choose your starting point:</label>
-                <div class="d-flex gap-3">
-                    <button type="button" class="btn btn-primary" onclick="getCurrentLocation()">
-                        <i class="fas fa-location-arrow me-2"></i>Use My Current Location
-                    </button>
-                    <span class="text-muted align-self-center">or</span>
-                    <input type="text" class="form-control" id="startLocation" name="start_location" placeholder="Enter your starting address">
+            <form id="startLocationForm" method="POST">
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Choose your starting point:</label>
+                    
+                    <!-- Device Location Option -->
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary w-100 text-start" onclick="getDeviceLocation()">
+                            <i class="fas fa-location-crosshairs me-2"></i>
+                            Use my current location
+                        </button>
+                        <div id="locationStatus" class="text-muted mt-2 small"></div>
+                    </div>
+
+                    <!-- Manual Address Input -->
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search-location"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="manualAddress" 
+                                   name="start_location" 
+                                   placeholder="Or enter address manually">
+                        </div>
+                    </div>
+
+                    <!-- Hidden inputs for coordinates -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
                 </div>
-                <div id="locationStatus" class="form-text mt-2"></div>
-            </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-success" id="submitLocation">
+                    <i class="fas fa-arrow-right me-2"></i>Continue
+                </button>
+            </form>
         </div>
     </div>
 </div>
 
-<!-- Add this JavaScript at the end of your template, before the closing body tag -->
 <script>
-function getCurrentLocation() {
+function getDeviceLocation() {
     const statusDiv = document.getElementById('locationStatus');
-    const locationInput = document.getElementById('startLocation');
-    
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    const addressInput = document.getElementById('manualAddress');
+
+    statusDiv.innerHTML = '<span class="text-info">Requesting location access...</span>';
+
     if (!navigator.geolocation) {
-        statusDiv.innerHTML = '<span class="text-danger">Geolocation is not supported by your browser</span>';
+        statusDiv.innerHTML = '<span class="text-danger">Location services not supported by your browser</span>';
         return;
     }
 
-    statusDiv.innerHTML = '<span class="text-info">Getting your location...</span>';
-    
     navigator.geolocation.getCurrentPosition(
         // Success callback
-        (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
             
-            // Use reverse geocoding to get address from coordinates
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
-                .then(response => response.json())
-                .then(data => {
-                    const address = data.display_name;
-                    locationInput.value = address;
-                    statusDiv.innerHTML = '<span class="text-success">Location found!</span>';
-                })
-                .catch(error => {
-                    statusDiv.innerHTML = '<span class="text-danger">Could not get address from coordinates</span>';
-                    locationInput.value = `${latitude}, ${longitude}`;
-                });
+            // Store coordinates
+            latInput.value = lat;
+            lngInput.value = lng;
+            addressInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            
+            statusDiv.innerHTML = '<span class="text-success">✓ Location successfully captured!</span>';
         },
         // Error callback
-        (error) => {
+        function(error) {
+            let errorMessage = '';
             switch(error.code) {
                 case error.PERMISSION_DENIED:
-                    statusDiv.innerHTML = '<span class="text-danger">Please allow location access to use this feature</span>';
+                    errorMessage = 'Please allow location access in your browser settings';
                     break;
                 case error.POSITION_UNAVAILABLE:
-                    statusDiv.innerHTML = '<span class="text-danger">Location information unavailable</span>';
+                    errorMessage = 'Location information unavailable';
                     break;
                 case error.TIMEOUT:
-                    statusDiv.innerHTML = '<span class="text-danger">Location request timed out</span>';
+                    errorMessage = 'Location request timed out';
                     break;
                 default:
-                    statusDiv.innerHTML = '<span class="text-danger">An unknown error occurred</span>';
-                    break;
+                    errorMessage = 'An unknown error occurred';
             }
+            statusDiv.innerHTML = `<span class="text-danger">${errorMessage}</span>`;
         },
         // Options
         {
             enableHighAccuracy: true,
-            timeout: 5000,
+            timeout: 10000,
             maximumAge: 0
         }
     );
 }
+
+// Prevent form submission if no location is selected
+document.getElementById('startLocationForm').onsubmit = function(e) {
+    const address = document.getElementById('manualAddress').value;
+    const lat = document.getElementById('latitude').value;
+    const lng = document.getElementById('longitude').value;
+
+    if (!address && (!lat || !lng)) {
+        e.preventDefault();
+        alert('Please select a location or enter an address');
+        return false;
+    }
+    return true;
+};
 </script>
 {% endblock %} 
