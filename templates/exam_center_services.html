@@ -104,5 +104,84 @@
             </div>
         </div>
     </div>
+
+    <!-- Add this section where you want to get user's location -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4><i class="fas fa-map-marker-alt me-2"></i>Starting Location</h4>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="startLocation" class="form-label">Choose your starting point:</label>
+                <div class="d-flex gap-3">
+                    <button type="button" class="btn btn-primary" onclick="getCurrentLocation()">
+                        <i class="fas fa-location-arrow me-2"></i>Use My Current Location
+                    </button>
+                    <span class="text-muted align-self-center">or</span>
+                    <input type="text" class="form-control" id="startLocation" name="start_location" placeholder="Enter your starting address">
+                </div>
+                <div id="locationStatus" class="form-text mt-2"></div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Add this JavaScript at the end of your template, before the closing body tag -->
+<script>
+function getCurrentLocation() {
+    const statusDiv = document.getElementById('locationStatus');
+    const locationInput = document.getElementById('startLocation');
+    
+    if (!navigator.geolocation) {
+        statusDiv.innerHTML = '<span class="text-danger">Geolocation is not supported by your browser</span>';
+        return;
+    }
+
+    statusDiv.innerHTML = '<span class="text-info">Getting your location...</span>';
+    
+    navigator.geolocation.getCurrentPosition(
+        // Success callback
+        (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            // Use reverse geocoding to get address from coordinates
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    locationInput.value = address;
+                    statusDiv.innerHTML = '<span class="text-success">Location found!</span>';
+                })
+                .catch(error => {
+                    statusDiv.innerHTML = '<span class="text-danger">Could not get address from coordinates</span>';
+                    locationInput.value = `${latitude}, ${longitude}`;
+                });
+        },
+        // Error callback
+        (error) => {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    statusDiv.innerHTML = '<span class="text-danger">Please allow location access to use this feature</span>';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    statusDiv.innerHTML = '<span class="text-danger">Location information unavailable</span>';
+                    break;
+                case error.TIMEOUT:
+                    statusDiv.innerHTML = '<span class="text-danger">Location request timed out</span>';
+                    break;
+                default:
+                    statusDiv.innerHTML = '<span class="text-danger">An unknown error occurred</span>';
+                    break;
+            }
+        },
+        // Options
+        {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        }
+    );
+}
+</script>
 {% endblock %} 
