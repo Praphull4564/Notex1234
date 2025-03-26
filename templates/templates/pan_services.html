@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}PAN Services{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2 class="display-4 fw-bold">PAN Services</h2>
+        <p class="lead">Complete range of PAN card services at your fingertips</p>
+    </div>
+
+    <div class="row">
+        {% for category, services in pan_services.items() %}
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-bookmark me-2" style="color: #1e88e5;"></i>
+                    <h4 class="mb-0">{{ category }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for service in services %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 service-box">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        {% if 'Application' in service %}
+                                            <i class="fas fa-file-alt service-icon-small"></i>
+                                        {% elif 'Correction' in service %}
+                                            <i class="fas fa-edit service-icon-small"></i>
+                                        {% elif 'Link' in service %}
+                                            <i class="fas fa-link service-icon-small"></i>
+                                        {% elif 'Business' in service %}
+                                            <i class="fas fa-building service-icon-small"></i>
+                                        {% else %}
+                                            <i class="fas fa-id-card service-icon-small"></i>
+                                        {% endif %}
+                                        <h5 class="card-title mb-0 ms-2">{{ service }}</h5>
+                                    </div>
+                                    <p class="card-text text-muted mb-3">
+                                        {% if 'Application' in service %}
+                                            Apply for new PAN card
+                                        {% elif 'Correction' in service %}
+                                            Update your existing PAN details
+                                        {% elif 'Link' in service %}
+                                            Link PAN with other services
+                                        {% elif 'Business' in service %}
+                                            PAN services for businesses
+                                        {% else %}
+                                            Manage your PAN card
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ url_for('book_appointment', service_type='PAN', service_name=service) }}" 
+                                       class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-calendar-alt me-2"></i>Book Appointment
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Additional Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-info-circle me-2" style="color: #1e88e5;"></i>
+                        Important Information
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-clock fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5>Processing Time</h5>
+                                <p class="text-muted">7-10 working days</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-file-alt fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5>Required Documents</h5>
+                                <p class="text-muted">Identity and address proof</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-phone fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5>Support Available</h5>
+                                <p class="text-muted">24/7 customer service</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .service-box {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .service-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #1e88e5;
+    }
+    
+    .service-icon-small {
+        font-size: 1.5rem;
+        color: #1e88e5;
+        width: 40px;
+        text-align: center;
+    }
+    
+    .card-header {
+        background-color: white;
+        border-bottom: 2px solid #e3f2fd;
+    }
+    
+    .btn-outline-primary {
+        color: #1e88e5;
+        border-color: #1e88e5;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #1e88e5;
+        color: white;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

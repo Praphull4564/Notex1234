@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - {{ service_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card form-card">
+            <div class="card-header">
+                <h4 class="mb-0">Book Appointment</h4>
+            </div>
+            <div class="card-body">
+                <!-- Service Details Section -->
+                <div class="service-details mb-4">
+                    <h5 class="text-primary mb-3">Service Details</h5>
+                    <div class="info-card p-3 rounded">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-2">
+                                    <span class="label">Service Type:</span>
+                                    <span class="value">{{ service_type }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-2">
+                                    <span class="label">Service:</span>
+                                    <span class="value">{{ service_name }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appointment Form -->
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-4">
+                        <h5 class="text-primary mb-3">Appointment Details</h5>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.appointment_date.label(class="form-label") }}
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar"></i>
+                                </span>
+                                {{ form.appointment_date(class="form-control", type="datetime-local", min=today) }}
+                            </div>
+                            {% if form.appointment_date.errors %}
+                                {% for error in form.appointment_date.errors %}
+                                    <div class="text-danger mt-1">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Choose your preferred date and time for the appointment
+                            </small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            {{ form.notes.label(class="form-label") }}
+                            {{ form.notes(class="form-control", rows="3", 
+                                placeholder="Enter any specific requirements or additional information...") }}
+                            {% if form.notes.errors %}
+                                {% for error in form.notes.errors %}
+                                    <div class="text-danger mt-1">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Important Information -->
+                    <div class="alert alert-info mb-4">
+                        <h6 class="alert-heading mb-2">Important Information:</h6>
+                        <ul class="mb-0">
+                            <li>Please be ready 15 minutes before your scheduled time</li>
+                            <li>Bring all necessary original documents</li>
+                            <li>We'll contact you to confirm your appointment</li>
+                        </ul>
+                    </div>
+
+                    {{ form.submit(class="btn btn-primary btn-lg w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this to your base template head section -->
+{% block extra_head %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+{% endblock %}
+{% endblock %}

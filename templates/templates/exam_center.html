@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Know Your Exam Center</h2>
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ url_for('upload_admit_card') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="admit_card">Upload your Admit Card:</label>
+                    <input type="file" class="form-control-file" id="admit_card" name="admit_card" 
+                           accept=".pdf,.jpg,.jpeg,.png" required>
+                    <small class="form-text text-muted">Supported formats: PDF, JPG, JPEG, PNG</small>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Upload and Continue</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

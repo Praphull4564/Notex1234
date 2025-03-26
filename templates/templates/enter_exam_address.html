@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Enter Exam Center Address</h2>
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ url_for('get_exam_directions') }}" method="post">
+                <div class="form-group">
+                    <label for="address">Exam Center Address:</label>
+                    <textarea class="form-control" id="address" name="address" 
+                              rows="4" required 
+                              placeholder="Enter your exam center's complete address"></textarea>
+                    <small class="form-text text-muted">
+                        Please enter the complete address for accurate directions
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Get Directions</button>
+                <a href="{{ url_for('exam_center_services') }}" 
+                   class="btn btn-secondary mt-3">Back to Services</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

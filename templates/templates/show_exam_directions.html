@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Directions to Your Exam Center</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Your Admit Card Details</h5>
+        </div>
+        <div class="card-body">
+            <p>Latest uploaded admit card: {{ admit_cards[-1].filename }}</p>
+            <p>Upload date: {{ admit_cards[-1].upload_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Google Maps Directions</h5>
+        </div>
+        <div class="card-body">
+            {% if maps_link %}
+                <div class="alert alert-info">
+                    <p>Click below to open directions in Google Maps:</p>
+                    <a href="{{ maps_link }}" target="_blank" class="btn btn-primary mt-2">
+                        Open in Google Maps
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    Could not generate directions. Please try again.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ url_for('exam_center_services') }}" class="btn btn-secondary">
+            Back to Services
+        </a>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold" style="color: #2c3e50;">Welcome to Notex</h1>
+            <p class="lead" style="color: #34495e; font-size: 1.3rem;">
+                Your one-stop solution for document services and exam center information
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Services Section -->
+    <div class="row g-4">
+        <!-- Aadhar Services Card -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-4">
+                        <i class="fas fa-fingerprint fa-3x" style="color: #1e88e5;"></i>
+                    </div>
+                    <h3 class="card-title mb-3" style="color: #2c3e50; font-weight: 600;">
+                        Aadhar Services
+                    </h3>
+                    <p class="card-text mb-4" style="color: #34495e;">
+                        Access all Aadhar related services including enrollment, updates, and verification
+                    </p>
+                    <a href="{{ url_for('aadhar_services') }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-arrow-right me-2"></i>View Services
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAN Services Card -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-4">
+                        <i class="fas fa-id-card fa-3x" style="color: #1e88e5;"></i>
+                    </div>
+                    <h3 class="card-title mb-3" style="color: #2c3e50; font-weight: 600;">
+                        PAN Services
+                    </h3>
+                    <p class="card-text mb-4" style="color: #34495e;">
+                        Complete range of PAN card services including new applications and corrections
+                    </p>
+                    <a href="{{ url_for('pan_services') }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-arrow-right me-2"></i>View Services
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Center Card -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-4">
+                        <i class="fas fa-map-marked-alt fa-3x" style="color: #1e88e5;"></i>
+                    </div>
+                    <h3 class="card-title mb-3" style="color: #2c3e50; font-weight: 600;">
+                        Know Your Exam Center
+                    </h3>
+                    <p class="card-text mb-4" style="color: #34495e;">
+                        Find your exam center location and get directions easily
+                    </p>
+                    <a href="{{ url_for('exam_center_services') }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-arrow-right me-2"></i>View Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4" style="color: #2c3e50; font-weight: 600;">
+                        Why Choose Notex?
+                    </h3>
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5 style="color: #2c3e50;">Secure Services</h5>
+                                <p style="color: #34495e;">Your data is always protected</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-bolt fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5 style="color: #2c3e50;">Quick Process</h5>
+                                <p style="color: #34495e;">Fast and efficient service</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-headset fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5 style="color: #2c3e50;">24/7 Support</h5>
+                                <p style="color: #34495e;">Always here to help you</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-check-circle fa-2x mb-3" style="color: #1e88e5;"></i>
+                                <h5 style="color: #2c3e50;">Verified Services</h5>
+                                <p style="color: #34495e;">Government authorized</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body p-5 text-center">
+                    <h3 class="mb-3">Ready to Get Started?</h3>
+                    <p class="mb-4">Join thousands of satisfied users who trust Notex for their document services</p>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-5">
+                        Register Now
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('aadhar_services') }}" class="btn btn-light btn-lg px-5">
+                        Explore Services
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
