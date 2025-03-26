@@ -499,13 +499,15 @@ def get_exam_directions():
         if not admit_cards:
             flash('Please upload your admit card first before getting directions.', 'warning')
             return redirect(url_for('book_exam_center', service_name='Upload New Admit Card'))
+        
 
+        starting_address = request.form.get('starting_address')
         address = request.form.get('address')
         if not address:
             flash('Address is required', 'danger')
             return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
         
-        maps_link = generate_maps_link(address)
+        maps_link = generate_maps_link(starting_address,address)
         if not maps_link:
             flash('Could not generate directions. Please try again.', 'warning')
             return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
