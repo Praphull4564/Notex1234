@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Know Your Exam Center{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2 class="display-4">Know Your Exam Center</h2>
+        <p class="lead">Find your exam center location and manage your admit cards easily</p>
+    </div>
+
+    <div class="row">
+        {% for category, services in exam_center_services.items() %}
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        {% if category == "Exam Center Services" %}
+                            <i class="fas fa-map-marked-alt me-2"></i>
+                        {% else %}
+                            <i class="fas fa-plus-circle me-2"></i>
+                        {% endif %}
+                        {{ category }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        {% for service in services %}
+                        <div class="col-md-4">
+                            <div class="service-card h-100">
+                                <div class="card-body text-center">
+                                    <div class="service-icon">
+                                        {% if service == "Find Exam Center" %}
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        {% elif service == "Upload New Admit Card" %}
+                                            <i class="fas fa-file-upload"></i>
+                                        {% elif service == "View My Admit Cards" %}
+                                            <i class="fas fa-folder-open"></i>
+                                        {% else %}
+                                            <i class="fas fa-file-alt"></i>
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="card-title mb-3">{{ service }}</h5>
+                                    <p class="card-text mb-4">
+                                        {% if service == "Find Exam Center" %}
+                                        Get accurate directions to your examination center
+                                        {% elif service == "Upload New Admit Card" %}
+                                        Upload your admit card for verification
+                                        {% elif service == "View My Admit Cards" %}
+                                        Access your previously uploaded admit cards
+                                        {% else %}
+                                        Additional exam center related services
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ url_for('book_exam_center', service_name=service) }}" 
+                                       class="btn btn-primary">
+                                        <i class="fas fa-arrow-right me-2"></i>Access Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Information Cards -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Important Information
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
+                                <h5>Admit Card Required</h5>
+                                <p class="text-muted">Upload your admit card before getting directions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-file-alt text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h5>Supported Formats</h5>
+                                <p class="text-muted">PDF, JPG, JPEG, PNG files accepted</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-map-marked-alt text-info mb-3" style="font-size: 3rem;"></i>
+                                <h5>Google Maps Integration</h5>
+                                <p class="text-muted">Get accurate directions to your center</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -8,9 +8,19 @@ from datetime import datetime, timedelta
 import traceback
 from urllib.parse import unquote
 from bson import ObjectId
+from werkzeug.utils import secure_filename
+import os
+from googlemapss import generate_maps_link
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
+
+# Add these configurations after other app.config settings
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Ensure upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Initialize MongoDB first
 mongo.init_app(app)
@@ -81,6 +91,19 @@ PAN_SERVICES = {
         "PAN for LLPs & Firms",
         "PAN for Trusts & NGOs",
         "PAN for Foreign Companies"
+    ]
+}
+
+EXAM_CENTER_SERVICES = {
+    "Exam Center Services": [
+        "Find Exam Center",
+        "Upload New Admit Card",
+        "View My Admit Cards"
+    ],
+    "Additional Services": [
+        "Download Saved Admit Card",
+        "Update Exam Center",
+        "View Travel History"
     ]
 }
 
@@ -182,6 +205,10 @@ def aadhar_services():
 @app.route('/pan_services')
 def pan_services():
     return render_template('pan_services.html', pan_services=PAN_SERVICES)
+
+@app.route('/exam_center_services')
+def exam_center_services():
+    return render_template('exam_center_services.html', exam_center_services=EXAM_CENTER_SERVICES)
 
 @app.route('/book_appointment/<service_type>/<service_name>', methods=['GET', 'POST'])
 @login_required
@@ -379,9 +406,118 @@ def search():
                     'service': service
                 })
     
+    # Add Exam Center services to search
+    for category, services in EXAM_CENTER_SERVICES.items():
+        for service in services:
+            if query in service.lower():
+                results.append({
+                    'type': 'Exam Center',
+                    'category': category,
+                    'service': service,
+                    'url': url_for('book_exam_center', service_name=service)
+                })
+    
     return render_template('search_results.html', 
                          results=results, 
                          query=query)
+
+@app.route('/book_exam_center/<service_name>', methods=['GET', 'POST'])
+@login_required
+def book_exam_center(service_name):
+    try:
+        service_name = unquote(service_name)
+        valid_services = [
+            service 
+            for category in EXAM_CENTER_SERVICES.values() 
+            for service in category
+        ]
+        
+        if service_name not in valid_services:
+            flash(f'Invalid service selected: {service_name}', 'danger')
+            return redirect(url_for('exam_center_services'))
+        
+        if service_name == "Find Exam Center":
+            # Check if user has uploaded any admit card
+            admit_cards = list(mongo.db.admit_cards.find({'user_id': current_user.id}))
+            if not admit_cards:
+                flash('Please upload your admit card first before getting directions.', 'warning')
+                return redirect(url_for('book_exam_center', service_name='Upload New Admit Card'))
+            return render_template('enter_exam_address.html', 
+                                 service_name=service_name,
+                                 service_type="Exam Center")
+        
+        elif service_name == "Upload New Admit Card":
+            return render_template('upload_admit_card.html', 
+                                 service_name=service_name,
+                                 service_type="Exam Center")
+        
+        elif service_name == "View My Admit Cards":
+            admit_cards = list(mongo.db.admit_cards.find({'user_id': current_user.id}))
+            return render_template('view_admit_cards.html', 
+                                 admit_cards=admit_cards,
+                                 service_type="Exam Center")
+    
+    except Exception as e:
+        print(f"Error in book_exam_center: {str(e)}")
+        flash('An error occurred. Please try again.', 'danger')
+        return redirect(url_for('exam_center_services'))
+
+@app.route('/upload-admit-card', methods=['POST'])
+@login_required
+def upload_admit_card():
+    if 'admit_card' not in request.files:
+        flash('No file uploaded', 'danger')
+        return redirect(url_for('book_exam_center', service_name='Upload New Admit Card'))
+    
+    file = request.files['admit_card']
+    if file.filename == '':
+        flash('No file selected', 'danger')
+        return redirect(url_for('book_exam_center', service_name='Upload New Admit Card'))
+
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    
+    # Store file info in MongoDB
+    admit_card_doc = {
+        'filename': filename,
+        'file_path': file_path,
+        'user_id': current_user.id,
+        'upload_date': datetime.now()
+    }
+    mongo.db.admit_cards.insert_one(admit_card_doc)
+    
+    flash('Admit card uploaded successfully! Now enter your exam center address.', 'success')
+    return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
+
+@app.route('/get-exam-directions', methods=['POST'])
+@login_required
+def get_exam_directions():
+    try:
+        # Verify user has an admit card
+        admit_cards = list(mongo.db.admit_cards.find({'user_id': current_user.id}))
+        if not admit_cards:
+            flash('Please upload your admit card first before getting directions.', 'warning')
+            return redirect(url_for('book_exam_center', service_name='Upload New Admit Card'))
+
+        address = request.form.get('address')
+        if not address:
+            flash('Address is required', 'danger')
+            return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
+        
+        maps_link = generate_maps_link(address)
+        if not maps_link:
+            flash('Could not generate directions. Please try again.', 'warning')
+            return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
+        
+        return render_template('show_exam_directions.html', 
+                             maps_link=maps_link,
+                             service_type="Exam Center",
+                             admit_cards=admit_cards)
+    except Exception as e:
+        print(f"Error generating directions: {str(e)}")
+        flash('An error occurred while generating directions. Please try again.', 'danger')
+        return redirect(url_for('book_exam_center', service_name='Find Exam Center'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

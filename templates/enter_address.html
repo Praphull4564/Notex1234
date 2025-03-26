@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Exam Center Address</title>
+</head>
+<body>
+    <h1>Enter Exam Center Address</h1>
+    <form action="{{ url_for('get_directions') }}" method="post">
+        <label for="address">Exam Center Address:</label><br>
+        <textarea id="address" name="address" rows="4" cols="50" required></textarea><br><br>
+        <input type="submit" value="Get Directions">
+    </form>
+</body>
+</html> 
